@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: slot-app
+spec:
+  template:
+    spec:
+      containers:
+      - name: slot-app
+        image: slot-app:latest
+        resources:
+          limits:
+            cpu: 50m
+            memory: 10Mi

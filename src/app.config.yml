@@ -1,0 +1,13 @@
+slots:
+  - name: "type"
+    options:
+      - "deckbuilding"
+      - "physical game"
+  - name: "theme"
+    options:
+      - "biology"
+      - "cooking"
+  - name: "mechanic"
+    options:
+      - "asymettry"
+      - "battle royale"
