@@ -2,14 +2,17 @@
   <div class="SlotApp">
     <article class="SlotMachine">
       <slot-wheel
-        v-for="slot in slots"
-        v-bind:key="slot.name"
-        v-bind.sync="slot"
-        :isSpinning="isSpinning"
+        v-for="wheel in slots"
+        v-bind:key="wheel.name"
+        v-bind.sync="wheel"
+
+        ref="slotWheels"
       />
     </article>
 
-    <button class="SlotLever" @click="spin">Spin!</button>
+    <button class="SlotLever" @click="spin" :disabled="isSpinning">
+      {{ isSpinning ? "Spinning..." : "Spin!" }}
+    </button>
   </div>
 </template>
 
@@ -18,8 +21,8 @@
 import Vue from "vue";
 import flow from "lodash.flow";
 
+import randomIntFactory from "./lib/random-int-factory";
 import SlotWheel from "./components/SlotWheel.vue";
-import config from "./app.config.yml";
 
 interface SlotConfig {
   slots: {
@@ -28,35 +31,24 @@ interface SlotConfig {
   }[]
 }
 
-const slotConfig = config as SlotConfig;
-
-const randomIntFactory: (int: number) => () => number = (int: number) => () =>
-  Math.round(Math.random() * int);
+const slotConfig = require("./app.config.yml") as SlotConfig;
 
 export default Vue.extend({
   data: function() {
     return {
-      isSpinning: true,
-      slots: slotConfig.slots.map(slot => {
-        const randomOption = flow([randomIntFactory(slot.options.length - 1), int => slot.options[int]])
-
-        return {
-          ...slot,
-          displayValue: randomOption(),
-          currentValue: randomOption()
-        };
-      })
+      isSpinning: false,
+      slots: slotConfig.slots
     }
   },
   methods: {
     spin() {
       this.isSpinning = true;
 
-      console.log(this.isSpinning);
-
-      // let nextInterval = 60;
-
-      // setInterval(() => {}, nextInterval);
+      Promise.all(
+        this.$refs.slotWheels.map(wheel => wheel.roll())
+      ).then(() => {
+        this.isSpinning = false;
+      });
     }
   },
   components: {
@@ -100,5 +92,11 @@ export default Vue.extend({
   background: black;
 
   cursor: pointer;
+}
+
+.SlotLever[disabled] {
+  background: gray;
+
+  cursor: not-allowed;
 }
 </style>

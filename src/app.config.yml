@@ -5,9 +5,12 @@ slots:
       - "physical game"
   - name: "theme"
     options:
-      - "biology"
+      - "evolution"
       - "cooking"
   - name: "mechanic"
     options:
       - "asymettry"
       - "battle royale"
+      - "synergy"
+      - "time limit"
+      - "permadeath"
