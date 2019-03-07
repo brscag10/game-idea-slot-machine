@@ -41,14 +41,14 @@ export default Vue.extend({
     }
   },
   methods: {
-    spin() {
+    async spin() {
       this.isSpinning = true;
 
-      Promise.all(
+      await Promise.all(
         this.$refs.slotWheels.map(wheel => wheel.roll())
-      ).then(() => {
-        this.isSpinning = false;
-      });
+      );
+        
+      this.isSpinning = false;
     }
   },
   components: {

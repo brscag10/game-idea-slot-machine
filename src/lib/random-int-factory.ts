@@ -1,3 +1,3 @@
-export default function randomIntFactory(int: number): () => number {
-  return () => Math.round(Math.random() * int);
+export default function randomIntFactory(max: number, min: number = 0): () => number {
+  return () => Math.round(Math.random() * (max - min)) + min;
 }

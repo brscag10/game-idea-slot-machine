@@ -7,34 +7,50 @@
 
 <script lang="ts">
 import Vue from "vue";
-import randomIntFactory from "../lib/random-int-factory";
 import { setTimeout } from "timers";
+
+import ShuffleQueue from "../lib/shuffle-queue";
+import randomIntFactory from "../lib/random-int-factory";
+
+interface Range<T> {
+  max: T;
+  min: T;
+}
+
+interface SlotPhysicsConfig {
+  startingSlotVelocityMS: Range<number>;
+  finalTickInterval: Range<number>;
+  frictionCoeffecient: number;
+}
+
+const config = require("../app.config.yml") as SlotPhysicsConfig;
 
 export default Vue.extend({
   data: function() {
-    const randomOptionIndex = randomIntFactory(this.$props.options.length - 1);
+    const { startingSlotVelocityMS, finalTickInterval } = config;
 
     return {
-      displayValue: this.$props.options[randomOptionIndex()]
+      displayValue: "---",
+      queue: new ShuffleQueue<string>(this.$props.options),
+
+      randomStartingVelocity: randomIntFactory(startingSlotVelocityMS.max, startingSlotVelocityMS.min),
+      randomFinalTickInterval: randomIntFactory(finalTickInterval.max, finalTickInterval.min)
     };
   },
   methods: {
     roll() {
-      // TODO: make these parameters configurable
-      const randomOptionIndex = randomIntFactory(this.$props.options.length - 1);
-      const startingVelocity = randomIntFactory(100)();
-      const maximumTimeout = 1000 + randomIntFactory(100)();
-      const coeffOfFriction = 1.25;
+      const startingVelocity = this.$data.randomStartingVelocity();
+      const finalTickInterval = this.$data.randomFinalTickInterval();
 
       let nextTimeout = startingVelocity;
 
       return new Promise(resolve => {
         const tick = () => {
-          this.$set(this, "displayValue", this.$props.options[randomOptionIndex()]);
+          this.$set(this, "displayValue", this.$data.queue.pick());
 
-          nextTimeout *= coeffOfFriction;
+          nextTimeout *= config.frictionCoeffecient;
 
-          if (nextTimeout > maximumTimeout) {
+          if (nextTimeout > finalTickInterval) {
             resolve();
           } else {
             setTimeout(tick, nextTimeout);
