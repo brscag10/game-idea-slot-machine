@@ -6,18 +6,35 @@ finalTickInterval:
   max: 1250
 frictionCoeffecient: 1.3
 slots:
-  - name: "type"
+  - name: "game type"
     options:
       - "deckbuilding"
-      - "physical game"
+      - "physical"
+      - "children's"
+      - "roleplaying"
+      - "puzzle"
+      - "party"
   - name: "theme"
     options:
       - "evolution"
       - "cooking"
-  - name: "mechanic"
+      - "manifest destiny"
+      - "warfare"
+      - "invention"
+      - "alchemy"
+      - "cosmic horror"
+      - "commerce"
+      - "geometric"
+      - "hegemony"
+  - name: "key mechanic"
     options:
       - "asymettry"
       - "battle royale"
       - "synergy"
       - "time limit"
       - "permadeath"
+      - "collaboration"
+      - "perfect knowledge"
+      - "shared resources"
+      - "see-through cards"
+      - "rule changes"

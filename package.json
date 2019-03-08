@@ -7,10 +7,10 @@
     "vue": "^2.6.8",
     "vue-hot-reload-api": "^2.3.3"
   },
-  "description": "testing out vue while making a idea chooser",
+  "description": "generate ideas for games",
   "license": "MIT",
   "main": "src/index.html",
-  "name": "random-vue-test",
+  "name": "game-idea-slot-machine",
   "scripts": {
     "build": "yarn parcel build src/index.html && gzip dist/src.*",
     "http": "./node_modules/http-server/bin/http-server",

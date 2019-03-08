@@ -1,6 +1,6 @@
 <template>
   <div class="SlotApp">
-    <article class="SlotMachine">
+    <article class="SlotMachine" v-bind:style="{ grid: '1fr / repeat(' + slots.length + ', 1fr)' }">
       <slot-wheel
         v-for="wheel in slots"
         v-bind:key="wheel.name"
@@ -70,11 +70,8 @@ export default Vue.extend({
 }
 
 .SlotMachine {
-  display: flex;
-  flex-direction: row;
-
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-column-gap: var(--horiz-padding);
 
   width: 100%;
   max-width: var(--max-supported-width);

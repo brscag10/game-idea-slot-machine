@@ -108,7 +108,7 @@ export default Vue.extend({
 
 @keyframes tick {
   from {
-    background-color: pink;
+    background-color: var(--tick-color);
   }
   to {
     background-color: transparent;
@@ -120,14 +120,15 @@ export default Vue.extend({
 }
 
 .SlotWheel--set {
-  background: lightgreen;
+  background: var(--set-color);
 }
 
 .SlotWheel--set > .SlotWheel__value {
-  color: green;
+  color: var(--set-text-color);
 }
 
 .SlotWheel__value {
+  text-align: center;
   font-size: var(--title-size);
 
   transition: color 350ms ease-out;
@@ -137,6 +138,6 @@ export default Vue.extend({
   font-size: var(--footnote-size);
   text-transform: uppercase;
 
-  color: red;
+  color: var(--type-text-color);
 }
 </style>
