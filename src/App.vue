@@ -19,7 +19,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import flow from "lodash.flow";
 
 import randomIntFactory from "./lib/random-int-factory";
 import SlotWheel from "./components/SlotWheel.vue";

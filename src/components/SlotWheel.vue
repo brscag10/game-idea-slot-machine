@@ -1,5 +1,11 @@
 <template>
-  <section class="SlotWheel">
+  <section
+    class="SlotWheel"
+    v-bind:class="{ 'SlotWheel--set': isSpinning === false, 'SlotWheel--tick': hasTicked === true }"
+    v-bind:style="{ 'animation-duration': tickDuration + 'ms' }"
+
+    @animationend="clearTick"
+  >
     <div class="SlotWheel__value">{{ displayValue }}</div>
     <h2 class="SlotWheel__name">{{ name }}</h2>
   </section>
@@ -30,8 +36,11 @@ export default Vue.extend({
     const { startingSlotVelocityMS, finalTickInterval } = config;
 
     return {
-      displayValue: "---",
+      displayValue: "--",
       queue: new ShuffleQueue<string>(this.$props.options),
+      isSpinning: null,
+      hasTicked: null,
+      tickDuration: null,
 
       randomStartingVelocity: randomIntFactory(startingSlotVelocityMS.max, startingSlotVelocityMS.min),
       randomFinalTickInterval: randomIntFactory(finalTickInterval.max, finalTickInterval.min)
@@ -39,6 +48,8 @@ export default Vue.extend({
   },
   methods: {
     roll() {
+      this.$set(this, "isSpinning", true);
+
       const startingVelocity = this.$data.randomStartingVelocity();
       const finalTickInterval = this.$data.randomFinalTickInterval();
 
@@ -51,14 +62,21 @@ export default Vue.extend({
           nextTimeout *= config.frictionCoeffecient;
 
           if (nextTimeout > finalTickInterval) {
+            this.$set(this, "isSpinning", false);
             resolve();
           } else {
+            this.$set(this, "tickDuration", nextTimeout / 2);
+            this.$set(this, "hasTicked", true);
+
             setTimeout(tick, nextTimeout);
           }
         };
 
         tick();
       });
+    },
+    clearTick() {
+      this.$set(this, "hasTicked", false);
     }
   },
   props: {
@@ -78,10 +96,41 @@ export default Vue.extend({
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+
+  transition: background-color 350ms ease-out;
+
+  will-change: background-color;
+}
+
+.SlotWheel--tick {
+  animation-name: tick;
+}
+
+@keyframes tick {
+  from {
+    background-color: pink;
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+.SlotWheel--tick > .SlotWheel__value {
+  will-change: color;
+}
+
+.SlotWheel--set {
+  background: lightgreen;
+}
+
+.SlotWheel--set > .SlotWheel__value {
+  color: green;
 }
 
 .SlotWheel__value {
   font-size: var(--title-size);
+
+  transition: color 350ms ease-out;
 }
 
 .SlotWheel__name {
