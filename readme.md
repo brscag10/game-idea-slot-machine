@@ -1,4 +1,4 @@
-# Game Idea Slot Machine
+# Game Idea Slot Machine 🎰
 
 my very first "I don't know what I'm doing" Vue app
 
